@@ -6,10 +6,13 @@ import { EmailDetail } from './components/EmailDetail';
 import { PaginationControls } from './components/PaginationControls';
 import { ThresholdSettings } from './components/ThresholdSettings';
 import { PageSizeSettings } from './components/PageSizeSettings';
+import { ModelSelector } from './components/ModelSelector';
 import { useGmailData } from './hooks/useGmailData';
 import { Email } from './types/email';
 
 export default function App() {
+  const [selectedModel, setSelectedModel] = useState<string>('gemma3:4b');
+  
   const {
     emails,
     labels,
@@ -33,7 +36,7 @@ export default function App() {
     markAsRead,
     goToNextPage,
     goToPreviousPage,
-  } = useGmailData();
+  } = useGmailData(selectedModel);
   const [selectedEmailId, setSelectedEmailId] = useState<string | null>(null);
   const [selectedEmailIds, setSelectedEmailIds] = useState<Set<string>>(new Set());
   const [selectedLabel, setSelectedLabel] = useState<string | null>(null);
@@ -156,6 +159,12 @@ export default function App() {
         >
           <RefreshCw size={20} className={`text-gray-700 ${loading ? 'animate-spin' : ''}`} />
         </button>
+        
+        {/* Model Selector */}
+        <ModelSelector
+          selectedModel={selectedModel}
+          onModelChange={setSelectedModel}
+        />
         
         {/* Page Size Settings */}
         <div className="flex items-center gap-2">

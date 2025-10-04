@@ -114,11 +114,11 @@ export const labelAPI = {
 // AI Suggestion API endpoints
 export const suggestionAPI = {
   // Get label suggestions for a single email
-  getSuggestions: async (emailId: string, threshold: number = 0.3): Promise<LabelSuggestion> => {
+  getSuggestions: async (emailId: string, threshold: number = 0.3, model: string = "gemma3:4b"): Promise<LabelSuggestion> => {
     try {
       const response = await api.post('/suggestions/single', {
         email_id: emailId,
-        model: "gemma3:4b",
+        model: model,
         score_threshold: threshold,
       });
       return response.data;
@@ -129,12 +129,12 @@ export const suggestionAPI = {
   },
 
   // Get different suggestion for an email (when user doesn't like current suggestion)
-  getDifferentSuggestion: async (emailId: string, rejectedSuggestions: string[], threshold: number = 0.3): Promise<LabelSuggestion> => {
+  getDifferentSuggestion: async (emailId: string, rejectedSuggestions: string[], threshold: number = 0.3, model: string = "gemma3:4b"): Promise<LabelSuggestion> => {
     try {
       const response = await api.post('/suggestions/different', {
         email_id: emailId,
         rejected_suggestions: rejectedSuggestions,
-        model: "gemma3:4b",
+        model: model,
         score_threshold: threshold,
       });
       return response.data;
@@ -145,13 +145,13 @@ export const suggestionAPI = {
   },
 
   // Get suggestion with user context message
-  getSuggestionWithContext: async (emailId: string, userMessage: string, rejectedSuggestions: string[] = [], threshold: number = 0.3): Promise<LabelSuggestion> => {
+  getSuggestionWithContext: async (emailId: string, userMessage: string, rejectedSuggestions: string[] = [], threshold: number = 0.3, model: string = "gemma3:4b"): Promise<LabelSuggestion> => {
     try {
       const response = await api.post('/suggestions/with-context', {
         email_id: emailId,
         user_message: userMessage,
         rejected_suggestions: rejectedSuggestions,
-        model: "gemma3:4b",
+        model: model,
         score_threshold: threshold,
       });
       return response.data;

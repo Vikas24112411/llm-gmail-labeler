@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Email, Label } from '../types/email';
 import { emailAPI, labelAPI, suggestionAPI } from '../services/api';
 
-export const useGmailData = () => {
+export const useGmailData = (selectedModel: string = 'gemma3:4b') => {
   const [emails, setEmails] = useState<Email[]>([]);
   const [labels, setLabels] = useState<Label[]>([]);
   const [loading, setLoading] = useState(false);
@@ -95,7 +95,7 @@ export const useGmailData = () => {
     ));
 
     try {
-      const response = await suggestionAPI.getSuggestions(emailId, threshold);
+      const response = await suggestionAPI.getSuggestions(emailId, threshold, selectedModel);
       
       // Update with suggestions
       setEmails(prev => prev.map(email =>
@@ -117,7 +117,7 @@ export const useGmailData = () => {
           : email
       ));
     }
-  }, [threshold]);
+  }, [threshold, selectedModel]);
 
   // Get different AI suggestion for an email (when user doesn't like current suggestion)
   const getDifferentSuggestion = useCallback(async (emailId: string) => {
@@ -146,7 +146,7 @@ export const useGmailData = () => {
       const accumulatedRejected = rejectedSuggestions.get(emailId) || [];
       const allRejectedSuggestions = [...accumulatedRejected, ...currentSuggestions];
       
-      const response = await suggestionAPI.getDifferentSuggestion(emailId, allRejectedSuggestions, threshold);
+      const response = await suggestionAPI.getDifferentSuggestion(emailId, allRejectedSuggestions, threshold, selectedModel);
       
       // Update with new suggestions
       setEmails(prev => prev.map(email =>
@@ -168,7 +168,7 @@ export const useGmailData = () => {
           : email
       ));
     }
-  }, [emails, rejectedSuggestions, threshold]);
+  }, [emails, rejectedSuggestions, threshold, selectedModel]);
 
   // Get batch suggestions
   const getBatchSuggestions = useCallback(async (maxResults: number = 10) => {
@@ -267,7 +267,8 @@ export const useGmailData = () => {
         emailId, 
         combinedContext, 
         rejectedSuggestionsList, 
-        threshold
+        threshold,
+        selectedModel
       );
       
       if (suggestion) {
@@ -304,7 +305,7 @@ export const useGmailData = () => {
         return email;
       }));
     }
-  }, [threshold, rejectedSuggestions, userMessages]);
+  }, [threshold, rejectedSuggestions, userMessages, selectedModel]);
 
   // Reject suggestions
   const rejectSuggestions = useCallback(async (emailId: string) => {
