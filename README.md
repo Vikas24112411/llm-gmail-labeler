@@ -19,6 +19,49 @@
 - 🔒 **Privacy First** - All data stays on your computer
 - 🎨 **Auto-Emoji** - New labels get relevant emojis automatically
 - ⚡ **Fast** - Caches emails and uses vector search
+- 🎛️ **Model Selection** - Choose from available Ollama models
+
+---
+
+## 📸 UI Screenshots
+
+### Main Interface
+![Main Interface](docs/screenshots/main-interface.png)
+
+*Clean, modern interface with email list, sidebar, and AI suggestion controls*
+
+### Model Selector Dropdown
+![Model Selector](docs/screenshots/model-selector.png)
+
+*Choose from available Ollama models in the top-right corner*
+
+### AI Suggestions in Action
+![AI Suggestions](docs/screenshots/ai-suggestions.png)
+
+*Real-time AI suggestions with confidence scores and rationale*
+
+### Email Detail View
+![Email Detail](docs/screenshots/email-detail.png)
+
+*Detailed email view with context-aware suggestions and label management*
+
+### Authentication Flow
+![Authentication](docs/screenshots/auth-flow.png)
+
+*Seamless Google OAuth authentication process*
+
+> **📝 Note**: Screenshots are placeholder paths. See [docs/screenshots/README.md](docs/screenshots/README.md) for instructions on adding real screenshots.
+
+---
+
+## 📱 Key UI Features
+
+- **🎛️ Model Selector**: Dropdown in top-right to switch between Ollama models
+- **📧 Email List**: Paginated view with search and filtering
+- **🏷️ Smart Labels**: AI-powered suggestions with confidence scores
+- **💬 Context Input**: Add custom notes to guide AI suggestions
+- **⚙️ Settings Panel**: Adjust threshold and page size preferences
+- **📊 Real-time Updates**: Instant feedback on label applications
 
 ---
 
