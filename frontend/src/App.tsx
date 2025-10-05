@@ -7,17 +7,19 @@ import { PaginationControls } from './components/PaginationControls';
 import { ThresholdSettings } from './components/ThresholdSettings';
 import { PageSizeSettings } from './components/PageSizeSettings';
 import { ModelSelector } from './components/ModelSelector';
+import { ToastContainer, useToast } from './components/Toast';
 import { useGmailData } from './hooks/useGmailData';
 import { Email } from './types/email';
 
 export default function App() {
   const [selectedModel, setSelectedModel] = useState<string>('gemma3:4b');
+  const { toasts, success, error: showError, warning, info, removeToast } = useToast();
   
   const {
     emails,
     labels,
     loading,
-    error,
+    error: emailError,
     currentPage,
     pageSize,
     pagination,
@@ -86,28 +88,35 @@ export default function App() {
   const handleAddLabel = async (emailId: string, labelName: string) => {
     try {
       await addLabel(emailId, labelName);
+      success('Label Applied', `"${labelName}" has been added to the email`);
     } catch (err) {
       console.error('Failed to add label:', err);
+      showError('Failed to Add Label', 'There was an error applying the label');
     }
   };
 
   const handleRemoveLabel = async (emailId: string, labelName: string) => {
     try {
       await removeLabel(emailId, labelName);
+      success('Label Removed', `"${labelName}" has been removed from the email`);
     } catch (err) {
       console.error('Failed to remove label:', err);
+      showError('Failed to Remove Label', 'There was an error removing the label');
     }
   };
 
   const handleGetSuggestions = (emailId: string) => {
+    info('Getting Suggestions', 'AI is analyzing the email content...');
     getSuggestions(emailId);
   };
 
   const handleAcceptSuggestion = (emailId: string, labelName: string) => {
+    success('Suggestion Accepted', `"${labelName}" has been applied to the email`);
     acceptSuggestion(emailId, labelName);
   };
 
   const handleRejectSuggestions = (emailId: string) => {
+    warning('Suggestions Rejected', 'The AI suggestions have been dismissed');
     rejectSuggestions(emailId);
   };
 
@@ -125,7 +134,9 @@ export default function App() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-gray-50">
+    <>
+      <ToastContainer toasts={toasts} onRemove={removeToast} />
+      <div className="h-screen flex flex-col bg-gray-50">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 px-4 py-3 flex items-center gap-4 flex-shrink-0">
         <button className="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors">
@@ -198,10 +209,10 @@ export default function App() {
         {!selectedEmail && (
           <div className="flex-1 bg-white overflow-y-auto pb-20">
             {/* Error message */}
-            {error && (
+            {emailError && (
               <div className="m-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
                 <p className="font-medium">Error loading emails</p>
-                <p className="text-sm mt-1">{error}</p>
+                <p className="text-sm mt-1">{emailError}</p>
                 <button
                   onClick={handleRefresh}
                   className="mt-2 px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700"
@@ -249,7 +260,7 @@ export default function App() {
               ))}
             </div>
             
-            {!loading && filteredEmails.length === 0 && !error && (
+            {!loading && filteredEmails.length === 0 && !emailError && (
               <div className="text-center py-12 text-gray-500">
                 <p className="text-lg mb-2">No emails found</p>
                 <button
@@ -288,6 +299,6 @@ export default function App() {
           />
         )}
       </div>
-    </div>
+    </>
   );
 }

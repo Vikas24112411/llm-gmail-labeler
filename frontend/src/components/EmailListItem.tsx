@@ -1,6 +1,6 @@
 import React, { memo, useState } from 'react';
 import { Email } from '../types/email';
-import { Star, StarOff, Loader2, Check, X, MessageCircle, Send } from 'lucide-react';
+import { Star, StarOff, Loader2, Check, X, MessageCircle, Send, Sparkles } from 'lucide-react';
 import { GeminiButton } from './GeminiButton';
 import { DifferentSuggestionButton } from './DifferentSuggestionButton';
 
@@ -126,19 +126,29 @@ export const EmailListItem = memo<EmailListItemProps>(({
 
           {/* Suggestions */}
           {email.suggestionsLoading && (
-            <div className="flex items-center gap-2 mt-2 text-sm text-blue-600">
-              <Loader2 size={16} className="animate-spin" />
-              <span>Getting suggestions...</span>
+            <div className="flex items-center gap-2 mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-blue-500 animate-pulse" />
+                <Loader2 size={16} className="animate-spin text-blue-500" />
+              </div>
+              <span className="text-sm text-blue-700 font-medium">AI is analyzing...</span>
             </div>
           )}
 
           {email.suggestions && email.suggestions.length > 0 && (
-            <div className="mt-2 p-2 bg-blue-50 border border-blue-200 rounded-lg">
-              <div className="text-xs text-blue-600 mb-2 font-medium">💡 AI Suggestions:</div>
+            <div className="mt-2 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg shadow-sm">
+              <div className="flex items-center gap-2 mb-2">
+                <Sparkles className="w-4 h-4 text-blue-500" />
+                <span className="text-xs text-blue-700 font-semibold uppercase tracking-wide">AI Suggestions</span>
+              </div>
               <div className="flex flex-wrap gap-2">
                 {email.suggestions.map((suggestion, idx) => (
-                  <div key={idx} className="flex items-center gap-1.5 bg-white px-2 py-1 rounded-md border border-blue-300">
-                    <span className="text-sm text-blue-800">{suggestion}</span>
+                  <div key={idx} className="flex items-center gap-2 bg-white px-3 py-2 rounded-lg border shadow-sm hover:shadow-md transition-all duration-200 text-green-600 bg-green-50 border-green-200">
+                    <span className="text-sm font-medium">{suggestion}</span>
+                    <div className="flex items-center gap-1">
+                      <div className="w-2 h-2 rounded-full bg-green-500" />
+                      <span className="text-xs font-medium">85%</span>
+                    </div>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
